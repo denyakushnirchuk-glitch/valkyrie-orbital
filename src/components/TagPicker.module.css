@@ -1,0 +1,30 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--black-3);
+  border: 0.5px solid var(--border);
+  color: var(--white-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  width: auto;
+}
+
+.tag:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+.active {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}

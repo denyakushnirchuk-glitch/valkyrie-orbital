@@ -1,0 +1,107 @@
+.loading {
+  padding: 5rem 2.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--white-dim);
+  text-align: center;
+}
+
+.hero {
+  padding: 4rem 2.5rem 2.5rem;
+  border-bottom: 0.5px solid var(--border-sub);
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.5rem; font-weight: 700;
+  color: var(--white); line-height: 1;
+}
+
+.body {
+  max-width: 760px;
+  padding: 3rem 2.5rem 5rem;
+}
+
+.h1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.25rem; font-weight: 700;
+  color: var(--white); line-height: 1;
+  margin: 3rem 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.h1:first-child { margin-top: 0; }
+
+.h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem; font-weight: 600;
+  color: var(--gold); margin: 2.5rem 0 1rem;
+  letter-spacing: 0.03em;
+}
+
+.h3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--white); margin: 1.75rem 0 0.6rem;
+}
+
+.p {
+  font-size: 0.9375rem; color: var(--white-dim);
+  line-height: 1.85; margin-bottom: 1rem;
+}
+
+.ul, .ol {
+  padding-left: 1.5rem; margin-bottom: 1rem;
+}
+
+.li {
+  font-size: 0.9375rem; color: var(--white-dim);
+  line-height: 1.75; margin-bottom: 0.25rem;
+}
+
+.blockquote {
+  border-left: 2px solid var(--gold);
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic; color: var(--white-dim);
+}
+
+.blockquote p { margin-bottom: 0; }
+
+.strong { color: var(--white); font-weight: 500; }
+
+.hr {
+  border: none;
+  border-top: 0.5px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+.tableWrap { overflow-x: auto; margin-bottom: 1.5rem; }
+
+.table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.th {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold-dim);
+  padding: 0.6rem 1rem; text-align: left;
+  border-bottom: 0.5px solid var(--border);
+  font-weight: 400;
+}
+
+.td {
+  padding: 0.65rem 1rem; color: var(--white-dim);
+  border-bottom: 0.5px solid var(--border-sub);
+  vertical-align: top;
+}

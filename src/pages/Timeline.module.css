@@ -1,0 +1,86 @@
+.timeline { padding: 2.5rem; }
+
+.phaseBlock { margin-bottom: 4rem; }
+
+.phaseHeader {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 2rem; padding-bottom: 0.75rem;
+  border-bottom: 0.5px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.phaseName {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem; font-weight: 600; color: var(--gold);
+}
+
+.phaseDesc { font-size: 0.85rem; color: var(--white-dim); flex: 1; }
+
+.phaseCount {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim);
+}
+
+.entries { display: flex; flex-direction: column; }
+
+.entry {
+  display: grid; grid-template-columns: 140px 1fr;
+  gap: 0 2rem; padding-bottom: 2rem;
+}
+
+.entryLeft { text-align: right; padding-top: 2px; }
+
+.entryDate {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dim);
+}
+
+.entryOutcome {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px;
+}
+
+.entryRight { position: relative; padding-left: 1.75rem; }
+
+.entryDot {
+  position: absolute; left: -1px; top: 4px;
+  width: 9px; height: 9px;
+  border: 1.5px solid var(--gold); background: var(--black);
+  transform: rotate(45deg);
+}
+
+.entry:not(:last-child) .entryRight::after {
+  content: ''; position: absolute;
+  left: 3px; top: 12px; width: 0.5px; bottom: 0;
+  background: var(--border);
+}
+
+.entryContent { display: flex; flex-direction: column; gap: 5px; }
+
+.entryName {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem; font-weight: 600; color: var(--white);
+}
+
+.entryProgram {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim);
+}
+
+.entryTags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.tag {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 7px; border: 0.5px solid var(--border);
+  color: var(--white-dim); background: var(--black-3);
+}
+
+.entryDesc { font-size: 0.8rem; color: var(--white-dim); line-height: 1.6; margin-top: 2px; }
+
+.empty {
+  padding: 5rem 2.5rem;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--white-dim); text-align: center;
+}
