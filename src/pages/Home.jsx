@@ -92,7 +92,7 @@ export default function Home({ agency = 'valkyrie' }) {
         <section className={styles.recent}>
           <div className={styles.sectionTag}>Recent missions</div>
           <div className={styles.grid}>
-            {recent.map(m => <MissionCard key={m.id} mission={m} />)}
+            {recent.map(m => <MissionCard key={m.id} mission={m} base={base} />)}
           </div>
           <button className={styles.allBtn} onClick={() => navigate(`${base}/missions`)}>
             View full archive →

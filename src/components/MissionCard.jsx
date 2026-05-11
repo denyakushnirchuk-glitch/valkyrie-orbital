@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './MissionCard.module.css'
 
-export default function MissionCard({ mission }) {
+export default function MissionCard({ mission, base = '/valkyrie' }) {
   const navigate = useNavigate()
 
   const outcomeColor = {
@@ -14,7 +14,7 @@ export default function MissionCard({ mission }) {
   return (
     <article
       className={styles.card}
-      onClick={() => navigate(`/missions/${mission.id}`)}
+      onClick={() => navigate(`${base}/missions/${mission.id}`)}
     >
       <div className={styles.image}>
         {mission.image_url

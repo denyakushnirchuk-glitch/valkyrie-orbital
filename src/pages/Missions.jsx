@@ -6,6 +6,7 @@ import PageHeader from '../components/PageHeader'
 import styles from './Missions.module.css'
 
 export default function Missions({ agency = 'valkyrie' }) {
+  const base = agency === 'valkyrie' ? '/valkyrie' : '/brown-aerospace'
   const [phase,   setPhase]   = useState('')
   const [outcome, setOutcome] = useState('')
   const [tag,     setTag]     = useState('')
@@ -69,7 +70,7 @@ export default function Missions({ agency = 'valkyrie' }) {
         <div className={styles.empty}>No missions match this filter</div>
       ) : (
         <div className={styles.grid}>
-          {missions.map(m => <MissionCard key={m.id} mission={m} />)}
+          {missions.map(m => <MissionCard key={m.id} mission={m} base={base} />)}
         </div>
       )}
     </main>
