@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm'
 import { supabase } from '../lib/supabase'
 import styles from './Bio.module.css'
 
-export default function Bio() {
+export default function Bio({ agency = 'valkyrie' }) {
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(true)
 
@@ -12,7 +12,7 @@ export default function Bio() {
     supabase
       .from('bio')
       .select('content')
-      .eq('id', 1)
+      .eq('agency', agency)
       .single()
       .then(({ data }) => {
         setContent(data?.content || '')

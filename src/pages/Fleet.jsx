@@ -4,8 +4,8 @@ import { VEHICLE_STATUSES } from '../lib/constants'
 import PageHeader from '../components/PageHeader'
 import styles from './Fleet.module.css'
 
-export default function Fleet() {
-  const { vehicles, loading } = useVehicles()
+export default function Fleet({ agency = 'valkyrie' }) {
+  const { vehicles, loading } = useVehicles(agency)
   const { missions } = useMissions()
 
   const missionCount = (name) =>

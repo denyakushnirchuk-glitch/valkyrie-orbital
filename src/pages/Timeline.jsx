@@ -3,8 +3,8 @@ import { CAREER_PHASES, OUTCOMES } from '../lib/constants'
 import PageHeader from '../components/PageHeader'
 import styles from './Timeline.module.css'
 
-export default function Timeline() {
-  const { missions, loading } = useMissions()
+export default function Timeline({ agency = 'valkyrie' }) {
+  const { missions, loading } = useMissions({ agency })
 
   const grouped = CAREER_PHASES.reduce((acc, phase) => {
     const phaseMissions = missions.filter(m => m.phase === phase.value)

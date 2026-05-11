@@ -1,0 +1,154 @@
+.root {
+  min-height: 100vh;
+  background: #08080a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.headerEyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 1.25rem;
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+
+.headerTitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 700;
+  color: #f0f0f5;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.25rem;
+  animation: fadeUp 0.7s ease 0.25s both;
+}
+
+.headerSub {
+  font-size: 0.9rem;
+  color: rgba(240,240,245,0.45);
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.75;
+  animation: fadeUp 0.7s ease 0.4s both;
+}
+
+.agencies {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 400px));
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  animation: fadeUp 0.7s ease 0.55s both;
+}
+
+.agencyCard {
+  background: #0a0a0c;
+  cursor: pointer;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.agencyCard:hover { background: #111116; }
+
+.cardInner {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 320px;
+}
+
+.cardAccent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.agencyCard:hover .cardAccent { transform: scaleX(1); }
+
+.cardEyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(240,240,245,0.3);
+}
+
+.cardName {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: #f0f0f5;
+  line-height: 1.1;
+  margin-top: 0.5rem;
+}
+
+.cardMotto {
+  font-style: italic;
+  font-size: 0.875rem;
+  color: rgba(240,240,245,0.45);
+  line-height: 1.6;
+  max-width: 300px;
+  flex: 1;
+}
+
+.cardCta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(240,240,245,0.35);
+  margin-top: 1.5rem;
+  transition: color 0.2s;
+}
+
+.agencyCard:hover .cardCta { color: #f0f0f5; }
+
+.cardCta span { margin-left: 4px; }
+
+.footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 3rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .agencies { grid-template-columns: 1fr; }
+}

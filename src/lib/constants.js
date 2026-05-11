@@ -34,3 +34,26 @@ export const VEHICLE_STATUSES = [
   { value: 'retired',  label: 'Retired',  color: '#8a8a9a' },
   { value: 'lost',     label: 'Lost',     color: '#9e3a3a' },
 ]
+
+export const BAI_PROGRAMS_SEED = [
+  'Quark', 'Proton', 'Valence', 'Electron', 'Neutron'
+]
+
+export const AGENCIES = [
+  {
+    id:       'valkyrie',
+    name:     'Valkyrie Orbital',
+    motto:    'Precision over spectacle.',
+    theme:    'valkyrie',
+    path:     '/valkyrie',
+    accent:   '#c9a84c',
+  },
+  {
+    id:       'bai',
+    name:     'Brown Aerospace Initiative',
+    motto:    'Technological Infrastructure, Crewed Execution.',
+    theme:    'bai',
+    path:     '/brown-aerospace',
+    accent:   '#e85d26',
+  },
+]

@@ -14,6 +14,7 @@ export function useMissions(filters = {}) {
         .select('*, programs(name), vehicles(name, type)')
         .order('created_at', { ascending: true })
 
+      if (filters.agency)  query = query.eq('agency', filters.agency)
       if (filters.phase)   query = query.eq('phase', filters.phase)
       if (filters.outcome) query = query.eq('outcome', filters.outcome)
       if (filters.tag)     query = query.contains('tags', [filters.tag])
@@ -24,7 +25,7 @@ export function useMissions(filters = {}) {
       setLoading(false)
     }
     fetch()
-  }, [filters.phase, filters.outcome, filters.tag])
+  }, [filters.agency, filters.phase, filters.outcome, filters.tag])
 
   return { missions, loading, error }
 }

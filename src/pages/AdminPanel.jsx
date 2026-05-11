@@ -15,7 +15,7 @@ const EMPTY_VEHICLE = {
   name: '', type: 'Launch Vehicle', status: 'active', description: '',
 }
 
-export default function AdminPanel() {
+export default function AdminPanel({ agency = 'valkyrie' }) {
   const [tab,          setTab]         = useState('missions')
   const [mission,      setMission]     = useState(EMPTY_MISSION)
   const [vehicle,      setVehicle]     = useState(EMPTY_VEHICLE)
@@ -42,7 +42,7 @@ export default function AdminPanel() {
       supabase.from('programs').select('*'),
       supabase.from('vehicles').select('*'),
       supabase.from('missions').select('*, programs(name)').order('created_at', { ascending: false }),
-      supabase.from('bio').select('content').eq('id', 1).single(),
+      supabase.from('bio').select('content').eq('agency', agency).single(),
     ])
     setPrograms(p || [])
     setVehicles(v || [])
@@ -128,6 +128,7 @@ export default function AdminPanel() {
         highlight:   mission.highlight,
         image_url,
         program_notes: mission.program_id === 'other' ? (mission.program_other || null) : null,
+        agency,
       }
 
       if (editingMission) {
@@ -199,6 +200,7 @@ export default function AdminPanel() {
         status:      vehicle.status,
         description: vehicle.description || null,
         image_url,
+        agency, 
       }
 
       if (editingVehicle) {
@@ -238,7 +240,7 @@ export default function AdminPanel() {
     const { error } = await supabase
       .from('bio')
       .update({ content: bioContent, updated_at: new Date().toISOString() })
-      .eq('id', 1)
+      .eq('agency', agency)
     if (error) setMsg('Error: ' + error.message)
     else setMsg('Agency profile saved.')
     setBioSaving(false)

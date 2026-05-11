@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-export function useVehicles() {
+export function useVehicles(agency) {
   const [vehicles, setVehicles] = useState([])
   const [loading, setLoading]   = useState(true)
 
   useEffect(() => {
-    supabase
+    let query = supabase
       .from('vehicles')
       .select('*')
       .order('created_at', { ascending: true })
-      .then(({ data }) => {
-        setVehicles(data || [])
-        setLoading(false)
-      })
-  }, [])
+
+    if (agency) query = query.eq('agency', agency)
+
+    query.then(({ data }) => {
+      setVehicles(data || [])
+      setLoading(false)
+    })
+  }, [agency])
 
   return { vehicles, loading }
 }

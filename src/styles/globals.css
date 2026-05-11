@@ -66,3 +66,23 @@ img { display: block; max-width: 100%; }
 .outcome-partial  { color: var(--outcome-partial); }
 .outcome-rescue   { color: var(--outcome-rescue); }
 .outcome-failed   { color: var(--outcome-failed); }
+
+[data-agency="bai"] {
+  --black:       #111112;
+  --black-2:     #1a1a1b;
+  --black-3:     #222224;
+  --black-4:     #2e2e30;
+  --white:       #f4f4f0;
+  --white-dim:   #8a8a82;
+  --gold:        #e85d26;
+  --gold-dim:    #8a3210;
+  --gold-bright: #ff7a45;
+  --navy:        #1a0f0a;
+  --border:      rgba(232,93,38,0.18);
+  --border-sub:  rgba(244,244,240,0.06);
+
+  --outcome-success: #3a9e6a;
+  --outcome-partial: #e85d26;
+  --outcome-rescue:  #7a9ec9;
+  --outcome-failed:  #9e3a3a;
+}

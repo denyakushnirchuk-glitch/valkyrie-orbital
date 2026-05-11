@@ -5,12 +5,12 @@ import MissionCard from '../components/MissionCard'
 import PageHeader from '../components/PageHeader'
 import styles from './Missions.module.css'
 
-export default function Missions() {
+export default function Missions({ agency = 'valkyrie' }) {
   const [phase,   setPhase]   = useState('')
   const [outcome, setOutcome] = useState('')
   const [tag,     setTag]     = useState('')
 
-  const { missions, loading } = useMissions({ phase, outcome, tag })
+  const { missions, loading } = useMissions({ phase, outcome, tag, agency })
 
   return (
     <main style={{ position: 'relative', zIndex: 1 }}>
