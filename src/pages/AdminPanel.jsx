@@ -127,6 +127,7 @@ export default function AdminPanel() {
         tags:        mission.tags,
         highlight:   mission.highlight,
         image_url,
+        program_notes: mission.program_id === 'other' ? (mission.program_other || null) : null,
       }
 
       if (editingMission) {
@@ -326,7 +327,17 @@ export default function AdminPanel() {
                 {programs.map(p => (
                   <option key={p.id} value={p.id}>{p.name}</option>
                 ))}
+                <option value="other">Other / Unlisted</option>
               </select>
+              {mission.program_id === 'other' && (
+                <input
+                style={{ marginTop: '6px' }}
+                value={mission.program_other || ''}
+                onChange={e => setMission(p => ({ ...p, program_other: e.target.value }))}
+                placeholder="Enter program name"
+                />
+                )}
+
             </div>
             <div className={styles.field}>
               <label>Vehicle</label>

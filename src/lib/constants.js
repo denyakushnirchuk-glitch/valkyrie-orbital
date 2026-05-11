@@ -5,6 +5,7 @@ export const CAREER_PHASES = [
   { value: 'Deep Frontier',    label: 'Deep Frontier',    desc: 'Duna, Eve, interplanetary' },
   { value: 'Outer Reaches',    label: 'Outer Reaches',    desc: 'Jool system, Eeloo, extreme range' },
   { value: 'Legacy Era',       label: 'Legacy Era',       desc: 'Permanent infrastructure, colonies' },
+  { value: 'Other',            label: 'Other',            desc: 'Unclassified operations' },
 ]
 
 export const MISSION_TAGS = [
@@ -25,7 +26,7 @@ export const OUTCOMES = [
 
 export const VEHICLE_TYPES = [
   'Launch Vehicle', 'Lander', 'Station',
-  'Transfer Stage', 'SSTO', 'Probe', 'Spaceplane', 'Tug',
+  'Transfer Stage', 'SSTO', 'Probe', 'Spaceplane', 'Tug', 'Other',
 ]
 
 export const VEHICLE_STATUSES = [
