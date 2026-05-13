@@ -13,6 +13,7 @@ import Timeline      from './pages/Timeline'
 import Bio           from './pages/Bio'
 import AdminLogin    from './pages/AdminLogin'
 import AdminPanel    from './pages/AdminPanel'
+import Crew from './pages/Crew'
 
 function AgencyWrapper({ agency, children }) {
   useEffect(() => {
@@ -23,7 +24,7 @@ function AgencyWrapper({ agency, children }) {
 }
 
 export default function App() {
-  const { loading, isAdmin, signIn, signOut } = useAuth()
+  const { loading, isAdmin, adminAgency, signIn, signOut } = useAuth()
 
   if (loading) return (
     <div style={{
@@ -94,8 +95,18 @@ export default function App() {
       <Route path="/valkyrie/admin" element={
         <AgencyWrapper agency="valkyrie">
           <StarField />
-          <Nav isAdmin={isAdmin} signOut={signOut} base="/valkyrie" agency="valkyrie" />
-          {isAdmin ? <AdminPanel agency="valkyrie" /> : <AdminLogin signIn={signIn} />}
+          <Nav isAdmin={isAdmin && adminAgency === 'valkyrie'} signOut={signOut} base="/valkyrie" agency="valkyrie" />
+          {isAdmin && adminAgency === 'valkyrie'
+            ? <AdminPanel agency="valkyrie" />
+            : <AdminLogin signIn={signIn} />
+          }
+        </AgencyWrapper>
+      } />
+      <Route path="/valkyrie/crew" element={
+        <AgencyWrapper agency="valkyrie">
+          <StarField />
+          <Nav isAdmin={isAdmin && adminAgency === 'valkyrie'} signOut={signOut} base="/valkyrie" agency="valkyrie" />
+          <Crew agency="valkyrie" />
         </AgencyWrapper>
       } />
 
@@ -152,8 +163,18 @@ export default function App() {
       <Route path="/brown-aerospace/admin" element={
         <AgencyWrapper agency="bai">
           <StarField />
-          <Nav isAdmin={isAdmin} signOut={signOut} base="/brown-aerospace" agency="bai" />
-          {isAdmin ? <AdminPanel agency="bai" /> : <AdminLogin signIn={signIn} />}
+          <Nav isAdmin={isAdmin && adminAgency === 'bai'} signOut={signOut} base="/brown-aerospace" agency="bai" />
+          {isAdmin && adminAgency === 'bai'
+            ? <AdminPanel agency="bai" />
+            : <AdminLogin signIn={signIn} />
+          }
+        </AgencyWrapper>
+      } />
+      <Route path="/brown-aerospace/crew" element={
+        <AgencyWrapper agency="bai">
+          <StarField />
+          <Nav isAdmin={isAdmin && adminAgency === 'bai'} signOut={signOut} base="/brown-aerospace" agency="bai" />
+          <Crew agency="bai" />
         </AgencyWrapper>
       } />
 

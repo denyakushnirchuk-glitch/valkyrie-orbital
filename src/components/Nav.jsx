@@ -25,6 +25,7 @@ export default function Nav({ isAdmin, signOut, base = '', agency = 'valkyrie' }
           { to: `${base}/fleet`,    label: 'Fleet'     },
           { to: `${base}/timeline`, label: 'Timeline'  },
           { to: `${base}/bio`,      label: 'Agency'    },
+          { to: `${base}/crew`, label: 'Crew' },
         ].map(({ to, label, end }) => (
           <li key={to}>
             <NavLink

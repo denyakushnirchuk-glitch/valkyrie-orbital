@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
+export const ADMIN_EMAILS = {
+  'denyadev@proton.me':      'valkyrie',
+  'yt.universaly@gmail.com': 'bai',
+}
+
 export function useAuth() {
-  const [user, setUser] = useState(null)
+  const [user,    setUser]    = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -23,7 +28,8 @@ export function useAuth() {
 
   const signOut = () => supabase.auth.signOut()
 
-  const isAdmin = user?.email === 'denyadev@proton.me'
+  const isAdmin    = user?.email in ADMIN_EMAILS
+  const adminAgency = ADMIN_EMAILS[user?.email] || null
 
-  return { user, loading, isAdmin, signIn, signOut }
+  return { user, loading, isAdmin, adminAgency, signIn, signOut }
 }

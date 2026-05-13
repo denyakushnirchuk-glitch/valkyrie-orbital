@@ -9,45 +9,56 @@ const EMPTY_MISSION = {
   name: '', program_id: '', vehicle_id: '', phase: 'Proving Grounds',
   outcome: 'success', ingame_date: '', crew: '', description: '',
   tags: [], highlight: false,
+  science_gained: '', contract_completed: '',
+  funds_gained: '', funds_spent: '', notes: '',
 }
 
 const EMPTY_VEHICLE = {
   name: '', type: 'Launch Vehicle', status: 'active', description: '',
 }
 
-export default function AdminPanel({ agency = 'valkyrie' }) {
-  const [tab,          setTab]         = useState('missions')
-  const [mission,      setMission]     = useState(EMPTY_MISSION)
-  const [vehicle,      setVehicle]     = useState(EMPTY_VEHICLE)
-  const [programs,     setPrograms]    = useState([])
-  const [vehicles,     setVehicles]    = useState([])
-  const [missions,     setMissions]    = useState([])
-  const [imgFile,      setImgFile]     = useState(null)
-  const [imgPreview,   setImgPreview]  = useState(null)
-  const [vImgFile,     setVImgFile]    = useState(null)
-  const [vImgPreview,  setVImgPreview] = useState(null)
-  const [saving,       setSaving]      = useState(false)
-  const [msg,          setMsg]         = useState('')
-  const [editingMission,  setEditingMission]  = useState(null)
-  const [editingVehicle,  setEditingVehicle]  = useState(null)
-  const [bioContent,   setBioContent]  = useState('')
-  const [bioSaving,    setBioSaving]   = useState(false)
+const EMPTY_CREW = {
+  name: '', role: 'Pilot', status: 'active', rating: 0, bio: '',
+}
 
-  useEffect(() => {
-    loadAll()
-  }, [])
+export default function AdminPanel({ agency = 'valkyrie' }) {
+  const [tab,            setTab]          = useState('missions')
+  const [mission,        setMission]      = useState(EMPTY_MISSION)
+  const [vehicle,        setVehicle]      = useState(EMPTY_VEHICLE)
+  const [crewMember,     setCrewMember]   = useState(EMPTY_CREW)
+  const [programs,       setPrograms]     = useState([])
+  const [vehicles,       setVehicles]     = useState([])
+  const [missions,       setMissions]     = useState([])
+  const [crewMembers,    setCrewMembers]  = useState([])
+  const [imgFile,        setImgFile]      = useState(null)
+  const [imgPreview,     setImgPreview]   = useState(null)
+  const [vImgFile,       setVImgFile]     = useState(null)
+  const [vImgPreview,    setVImgPreview]  = useState(null)
+  const [cImgFile,       setCImgFile]     = useState(null)
+  const [cImgPreview,    setCImgPreview]  = useState(null)
+  const [saving,         setSaving]       = useState(false)
+  const [msg,            setMsg]          = useState('')
+  const [editingMission, setEditingMission] = useState(null)
+  const [editingVehicle, setEditingVehicle] = useState(null)
+  const [editingCrew,    setEditingCrew]  = useState(null)
+  const [bioContent,     setBioContent]   = useState('')
+  const [bioSaving,      setBioSaving]    = useState(false)
+
+  useEffect(() => { loadAll() }, [])
 
   async function loadAll() {
-    const [{ data: p }, { data: v }, { data: m }, { data: b }] = await Promise.all([
-      supabase.from('programs').select('*'),
-      supabase.from('vehicles').select('*'),
-      supabase.from('missions').select('*, programs(name)').order('created_at', { ascending: false }),
+    const [{ data: p }, { data: v }, { data: m }, { data: b }, { data: c }] = await Promise.all([
+      supabase.from('programs').select('*').eq('agency', agency),
+      supabase.from('vehicles').select('*').eq('agency', agency),
+      supabase.from('missions').select('*, programs(name)').eq('agency', agency).order('created_at', { ascending: false }),
       supabase.from('bio').select('content').eq('agency', agency).single(),
+      supabase.from('crew').select('*').eq('agency', agency).order('created_at', { ascending: true }),
     ])
     setPrograms(p || [])
     setVehicles(v || [])
     setMissions(m || [])
     setBioContent(b?.content || '')
+    setCrewMembers(c || [])
   }
 
   const handleImgChange = (e, setFile, setPreview) => {
@@ -75,16 +86,21 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
   const startEditMission = (m) => {
     setEditingMission(m.id)
     setMission({
-      name:        m.name,
-      program_id:  m.program_id  || '',
-      vehicle_id:  m.vehicle_id  || '',
-      phase:       m.phase,
-      outcome:     m.outcome,
-      ingame_date: m.ingame_date || '',
-      crew:        m.crew?.join(', ') || '',
-      description: m.description || '',
-      tags:        m.tags || [],
-      highlight:   m.highlight || false,
+      name:               m.name,
+      program_id:         m.program_id  || '',
+      vehicle_id:         m.vehicle_id  || '',
+      phase:              m.phase,
+      outcome:            m.outcome,
+      ingame_date:        m.ingame_date || '',
+      crew:               m.crew?.join(', ') || '',
+      description:        m.description || '',
+      tags:               m.tags || [],
+      highlight:          m.highlight || false,
+      science_gained:     m.science_gained || '',
+      contract_completed: m.contract_completed || '',
+      funds_gained:       m.funds_gained || '',
+      funds_spent:        m.funds_spent  || '',
+      notes:              m.notes || '',
     })
     setImgPreview(m.image_url || null)
     setImgFile(null)
@@ -116,18 +132,23 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
         : []
 
       const payload = {
-        name:        mission.name.trim(),
-        program_id:  mission.program_id  || null,
-        vehicle_id:  mission.vehicle_id  || null,
-        phase:       mission.phase,
-        outcome:     mission.outcome,
-        ingame_date: mission.ingame_date || null,
+        name:               mission.name.trim(),
+        program_id:         mission.program_id === 'other' || !mission.program_id ? null : mission.program_id,
+        vehicle_id:         mission.vehicle_id || null,
+        phase:              mission.phase,
+        outcome:            mission.outcome,
+        ingame_date:        mission.ingame_date || null,
         crew,
-        description: mission.description || null,
-        tags:        mission.tags,
-        highlight:   mission.highlight,
+        description:        mission.description || null,
+        tags:               mission.tags,
+        highlight:          mission.highlight,
         image_url,
-        program_notes: mission.program_id === 'other' ? (mission.program_other || null) : null,
+        program_notes:      mission.program_id === 'other' ? (mission.program_other || null) : null,
+        science_gained:     mission.science_gained     ? Number(mission.science_gained)  : null,
+        contract_completed: mission.contract_completed || null,
+        funds_gained:       mission.funds_gained       ? Number(mission.funds_gained)    : null,
+        funds_spent:        mission.funds_spent        ? Number(mission.funds_spent)     : null,
+        notes:              mission.notes || null,
         agency,
       }
 
@@ -200,7 +221,7 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
         status:      vehicle.status,
         description: vehicle.description || null,
         image_url,
-        agency, 
+        agency,
       }
 
       if (editingVehicle) {
@@ -231,6 +252,80 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
     setMsg('Vehicle deleted.')
   }
 
+  // ── CREW ──────────────────────────────────────────────
+
+  const startEditCrew = (c) => {
+    setEditingCrew(c.id)
+    setCrewMember({
+      name:   c.name,
+      role:   c.role,
+      status: c.status,
+      rating: c.rating || 0,
+      bio:    c.bio || '',
+    })
+    setCImgPreview(c.image_url || null)
+    setCImgFile(null)
+    setTab('crew')
+    setMsg('')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const cancelEditCrew = () => {
+    setEditingCrew(null)
+    setCrewMember(EMPTY_CREW)
+    setCImgFile(null)
+    setCImgPreview(null)
+    setMsg('')
+  }
+
+  const saveCrew = async (e) => {
+    e.preventDefault()
+    if (!crewMember.name.trim()) return
+    setSaving(true)
+    setMsg('')
+    try {
+      let image_url = editingCrew
+        ? (cImgFile ? await uploadImage(cImgFile, 'crew') : cImgPreview)
+        : (cImgFile ? await uploadImage(cImgFile, 'crew') : null)
+
+      const payload = {
+        name:      crewMember.name.trim(),
+        role:      crewMember.role,
+        status:    crewMember.status,
+        rating:    crewMember.rating,
+        bio:       crewMember.bio || null,
+        image_url,
+        agency,
+      }
+
+      if (editingCrew) {
+        const { error } = await supabase.from('crew').update(payload).eq('id', editingCrew)
+        if (error) throw error
+        setMsg('Crew member updated.')
+        setEditingCrew(null)
+      } else {
+        const { error } = await supabase.from('crew').insert(payload)
+        if (error) throw error
+        setMsg('Crew member added.')
+      }
+
+      setCrewMember(EMPTY_CREW)
+      setCImgFile(null)
+      setCImgPreview(null)
+      await loadAll()
+    } catch (err) {
+      setMsg('Error: ' + err.message)
+    }
+    setSaving(false)
+  }
+
+  const deleteCrew = async (id) => {
+    if (!confirm('Remove this crew member? This cannot be undone.')) return
+    await supabase.from('crew').delete().eq('id', id)
+    setCrewMembers(prev => prev.filter(c => c.id !== id))
+    setMsg('Crew member removed.')
+  }
+
   // ── BIO ───────────────────────────────────────────────
 
   const saveBio = async (e) => {
@@ -253,13 +348,13 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
       <PageHeader eyebrow="Restricted access" title="Admin panel" />
 
       <div className={styles.tabs}>
-        {['missions', 'vehicles', 'archive', 'bio'].map(t => (
+        {['missions', 'vehicles', 'crew', 'archive', 'bio'].map(t => (
           <button
             key={t}
             className={tab === t ? `${styles.tab} ${styles.activeTab}` : styles.tab}
             onClick={() => { setTab(t); setMsg('') }}
           >
-            {t === 'bio' ? 'Agency bio' : t}
+            {t === 'bio' ? 'Agency bio' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         ))}
       </div>
@@ -333,13 +428,11 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
               </select>
               {mission.program_id === 'other' && (
                 <input
-                style={{ marginTop: '6px' }}
-                value={mission.program_other || ''}
-                onChange={e => setMission(p => ({ ...p, program_other: e.target.value }))}
-                placeholder="Enter program name"
-                />
-                )}
-
+                  style={{ marginTop: '6px' }}
+                  value={mission.program_other || ''}
+                  onChange={e => setMission(p => ({ ...p, program_other: e.target.value }))}
+                  placeholder="Enter program name" />
+              )}
             </div>
             <div className={styles.field}>
               <label>Vehicle</label>
@@ -374,6 +467,47 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
               selected={mission.tags}
               onChange={tags => setMission(p => ({ ...p, tags }))}
             />
+          </div>
+
+          <div className={styles.formGrid}>
+            <div className={styles.field}>
+              <label>Science gained</label>
+              <input type="number" min="0"
+                value={mission.science_gained}
+                onChange={e => setMission(p => ({ ...p, science_gained: e.target.value }))}
+                placeholder="0" />
+            </div>
+            <div className={styles.field}>
+              <label>Contract completed</label>
+              <input value={mission.contract_completed}
+                onChange={e => setMission(p => ({ ...p, contract_completed: e.target.value }))}
+                placeholder="e.g. Launch our first vessel" />
+            </div>
+          </div>
+
+          <div className={styles.formGrid}>
+            <div className={styles.field}>
+              <label>Funds gained</label>
+              <input type="number" min="0"
+                value={mission.funds_gained}
+                onChange={e => setMission(p => ({ ...p, funds_gained: e.target.value }))}
+                placeholder="0" />
+            </div>
+            <div className={styles.field}>
+              <label>Funds spent</label>
+              <input type="number" min="0"
+                value={mission.funds_spent}
+                onChange={e => setMission(p => ({ ...p, funds_spent: e.target.value }))}
+                placeholder="0" />
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label>Additional notes</label>
+            <textarea value={mission.notes}
+              onChange={e => setMission(p => ({ ...p, notes: e.target.value }))}
+              placeholder="Any extra notes, observations, or lore details…"
+              style={{ minHeight: '80px' }} />
           </div>
 
           <div className={styles.field}>
@@ -480,6 +614,129 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
         </form>
       )}
 
+      {/* ── CREW FORM ── */}
+      {tab === 'crew' && (
+        <form onSubmit={saveCrew} className={styles.form}>
+          <div className={styles.formHeading}>
+            {editingCrew ? 'Editing crew member' : 'Add crew member'}
+            {editingCrew && (
+              <button type="button" className={styles.cancelBtn} onClick={cancelEditCrew}>
+                Cancel edit
+              </button>
+            )}
+          </div>
+
+          <div className={styles.formGrid}>
+            <div className={styles.field}>
+              <label>Name *</label>
+              <input value={crewMember.name}
+                onChange={e => setCrewMember(p => ({ ...p, name: e.target.value }))}
+                placeholder="Jebediah Kerman" required />
+            </div>
+            <div className={styles.field}>
+              <label>Role</label>
+              <select value={crewMember.role}
+                onChange={e => setCrewMember(p => ({ ...p, role: e.target.value }))}>
+                <option value="Pilot">Pilot</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Scientist">Scientist</option>
+                <option value="Tourist">Tourist</option>
+              </select>
+            </div>
+          </div>
+
+          <div className={styles.formGrid}>
+            <div className={styles.field}>
+              <label>Status</label>
+              <select value={crewMember.status}
+                onChange={e => setCrewMember(p => ({ ...p, status: e.target.value }))}>
+                <option value="active">Active</option>
+                <option value="retired">Retired</option>
+                <option value="lost">Lost</option>
+              </select>
+            </div>
+            <div className={styles.field}>
+              <label>Rating (0–5)</label>
+              <div className={styles.ratingPicker}>
+                {[1, 2, 3, 4, 5].map(i => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setCrewMember(p => ({ ...p, rating: i === p.rating ? 0 : i }))}
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      fontSize: '1.5rem', padding: '0 2px',
+                      color: i <= crewMember.rating ? 'var(--gold)' : 'var(--black-4)',
+                      transition: 'color 0.15s',
+                    }}
+                  >★</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label>Bio</label>
+            <textarea value={crewMember.bio}
+              onChange={e => setCrewMember(p => ({ ...p, bio: e.target.value }))}
+              placeholder="Background, personality, notable achievements…"
+              style={{ minHeight: '80px' }} />
+          </div>
+
+          <div className={styles.field}>
+            <label>Kerbal photo / screenshot</label>
+            <div className={styles.imgDrop}>
+              <input type="file" accept="image/*"
+                onChange={e => handleImgChange(e, setCImgFile, setCImgPreview)} />
+              {cImgPreview
+                ? <img src={cImgPreview} className={styles.imgPreview} alt="preview" />
+                : <span className={styles.imgLabel}>Click to upload photo</span>
+              }
+            </div>
+            {cImgPreview && editingCrew && (
+              <button type="button" className={styles.clearImg}
+                onClick={() => { setCImgFile(null); setCImgPreview(null) }}>
+                Remove image
+              </button>
+            )}
+          </div>
+
+          <button type="submit" className={styles.submitBtn} disabled={saving}>
+            {saving ? 'Saving…' : editingCrew ? 'Save changes' : 'Add crew member'}
+          </button>
+
+          {crewMembers.length > 0 && (
+            <div style={{ marginTop: '2rem' }}>
+              <div className={styles.archiveGroupTitle}>Current roster</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', marginTop: '0.75rem' }}>
+                {crewMembers.map(c => (
+                  <div key={c.id} className={styles.archiveRow}>
+                    <div className={styles.archiveName}>{c.name}</div>
+                    <div className={styles.archiveMeta}>
+                      <span>{c.role}</span>
+                      <span style={{
+                        color: c.status === 'active' ? '#3a9e6a'
+                             : c.status === 'lost'   ? '#9e3a3a'
+                             : '#8a8a9a'
+                      }}>
+                        {c.status}
+                      </span>
+                      <span style={{ color: 'var(--gold)', letterSpacing: '2px' }}>
+                        {'★'.repeat(c.rating || 0)}
+                      </span>
+                    </div>
+                    <div className={styles.archiveActions}>
+                      <button type="button" className={styles.editBtn} onClick={() => startEditCrew(c)}>Edit</button>
+                      <button type="button" className={styles.deleteBtn} onClick={() => deleteCrew(c.id)}>Remove</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </form>
+      )}
+
       {/* ── ARCHIVE ── */}
       {tab === 'archive' && (
         <div className={styles.archiveSection}>
@@ -498,12 +755,8 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
                   {m.ingame_date && <span>{m.ingame_date}</span>}
                 </div>
                 <div className={styles.archiveActions}>
-                  <button className={styles.editBtn} onClick={() => startEditMission(m)}>
-                    Edit
-                  </button>
-                  <button className={styles.deleteBtn} onClick={() => deleteMission(m.id)}>
-                    Delete
-                  </button>
+                  <button className={styles.editBtn} onClick={() => startEditMission(m)}>Edit</button>
+                  <button className={styles.deleteBtn} onClick={() => deleteMission(m.id)}>Delete</button>
                 </div>
               </div>
             ))}
@@ -526,12 +779,8 @@ export default function AdminPanel({ agency = 'valkyrie' }) {
                   </span>
                 </div>
                 <div className={styles.archiveActions}>
-                  <button className={styles.editBtn} onClick={() => startEditVehicle(v)}>
-                    Edit
-                  </button>
-                  <button className={styles.deleteBtn} onClick={() => deleteVehicle(v.id)}>
-                    Delete
-                  </button>
+                  <button className={styles.editBtn} onClick={() => startEditVehicle(v)}>Edit</button>
+                  <button className={styles.deleteBtn} onClick={() => deleteVehicle(v.id)}>Delete</button>
                 </div>
               </div>
             ))}

@@ -47,10 +47,14 @@ export default function MissionDetail() {
       <div className={styles.body}>
         <div className={styles.meta}>
           {[
-            { label: 'In-game date',   value: mission.ingame_date },
-            { label: 'Career phase',   value: mission.phase },
-            { label: 'Vehicle',        value: mission.vehicles?.name },
-            { label: 'Vehicle type',   value: mission.vehicles?.type },
+            { label: 'In-game date',     value: mission.ingame_date },
+            { label: 'Career phase',     value: mission.phase },
+            { label: 'Vehicle',          value: mission.vehicles?.name },
+            { label: 'Vehicle type',     value: mission.vehicles?.type },
+            { label: 'Science gained',   value: mission.science_gained ? `${mission.science_gained} science` : null },
+            { label: 'Contract completed', value: mission.contract_completed },
+            { label: 'Funds gained',     value: mission.funds_gained ? `√${mission.funds_gained.toLocaleString()}` : null },
+            { label: 'Funds spent',      value: mission.funds_spent ? `√${mission.funds_spent.toLocaleString()}` : null },
           ].filter(r => r.value).map(({ label, value }) => (
             <div key={label} className={styles.metaRow}>
               <span className={styles.metaLabel}>{label}</span>
@@ -78,6 +82,13 @@ export default function MissionDetail() {
           <div className={styles.description}>
             <p className={styles.descLabel}>Mission report</p>
             <p className={styles.descText}>{mission.description}</p>
+          </div>
+        )}
+
+        {mission.notes && (
+          <div className={styles.description}>
+            <p className={styles.descLabel}>Notes</p>
+            <p className={styles.descText}>{mission.notes}</p>
           </div>
         )}
       </div>

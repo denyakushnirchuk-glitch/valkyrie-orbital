@@ -214,3 +214,11 @@
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--white-dim); text-align: center;
 }
+
+
+.ratingPicker {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 0;
+}
