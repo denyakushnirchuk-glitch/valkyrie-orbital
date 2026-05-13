@@ -1,16 +1,39 @@
-# React + Vite
+# KSP Chronicles
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application for tracking and sharing Kerbal Space Program campaign progress — built as a living mission archive for two independent space agencies.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+KSP Chronicles hosts two agencies — **Valkyrie Orbital** and the **Brown Aerospace Initiative** — each with their own visual identity, mission data, and admin access. Readers can follow either agency's progress in real time, while each admin independently manages their own chronicle.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Mission archive** — log missions with screenshots, tags, career phase, outcome, crew, science, funds, and contracts
+- **Fleet registry** — track every rocket, lander, station, and vehicle with images and mission counts
+- **Crew roster** — register Kerbals with photos, roles, star ratings, and mission history
+- **Campaign timeline** — chronological mission history grouped by career phase
+- **Agency bio** — fully editable Markdown profile page per agency
+- **Admin panel** — protected per-agency dashboard for logging, editing, and deleting all records
+- **Public reader view** — clean, read-only access for anyone with the link
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React + Vite** — frontend framework and build tool
+- **Supabase** — PostgreSQL database, authentication, and image storage
+- **React Router** — client-side routing with per-agency path prefixes
+- **GitHub Pages** — static hosting via `gh-pages`
+
+## Agencies
+
+| Agency | Theme | Admin |
+|---|---|---|
+| Valkyrie Orbital | Black + Gold | denyadev@proton.me |
+| Brown Aerospace Initiative | Charcoal + Red-orange | yt.universaly@gmail.com |
+
+## Deployment
+
+```bash
+npm run deploy
+```
+
+Live at: `https://denyakushnirchuk-glitch.github.io/valkyrie-orbital/`
